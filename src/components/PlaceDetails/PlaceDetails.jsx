@@ -20,6 +20,10 @@ const PlaceDetails = ({place}) => {
             <CardContent>
                 <Typography gutterBottom variant="h5">{place.name}</Typography>
                 <Box style={{display:"flex", justifyContent:"space-between"}}>
+                    <Rating size='small' value={Number(place.rating)} readOnly />
+                    <Typography gutterBottom variant="subtitle1">out of {place.num_reviews} reviews</Typography>
+                </Box>
+                <Box style={{display:"flex", justifyContent:"space-between"}}>
                     <Typography variant="subtitle1">Price</Typography>
                     <Typography gutterBottom variant="subtitle1">{place.price_level}</Typography>
                 </Box>
@@ -33,14 +37,14 @@ const PlaceDetails = ({place}) => {
                 ))}
 
                 {place?.address && (
-                    <Typography guttrtBottom variant="body2" color="textSecondary" className={classes.subtitle}>
+                    <Typography gutterBottom variant="body2" color="textSecondary" className={classes.subtitle}>
                         <LocationOnIcon />
                         {place.address}
                     </Typography>
                 )}
 
                 {place?.phone && (
-                    <Typography guttrtBottom variant="body2" color="textSecondary" className={classes.spacing}>
+                    <Typography gutterBottom variant="body2" color="textSecondary" className={classes.spacing}>
                         <PhoneIcon />
                         {place.phone}
                     </Typography>
