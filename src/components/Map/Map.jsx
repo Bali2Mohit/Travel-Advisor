@@ -6,34 +6,36 @@ import Rating from '@material-ui/lab/Rating';
 
 import useStyles from './styles';
 
-const Map = ({setCoordinates, setBounds, coordinates, places}) => {
+const Map = ({setCoordinates, setBounds, coordinates, places, setChildClicked, weatherData}) => {
     const classes = useStyles();
     const isDesktop = useMediaQuery('(min-width:600px)');
 
+    //console.log({weatherData});
+    
     return(
         <div className={classes.mapContainer}>
             <GoogleMapReact
-                bootstrapURLKeys={{key:'AIzaSyCHecnQ2TcpdsNIKveq_c8LeHM8SZLrfng'}}
-                defaultCenter={coordinates}
+                bootstrapURLKeys={{key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY}}
+                defaultCenter={undefined}
                 center={coordinates}
                 defaultZoom={14}
                 margin={[50, 50, 50, 50]}
-                options={''}
+                options={{disableDefaultUI:true, zoomControl:true}}
                 onChange={(e) => {
                     setCoordinates({lat:e.center.lat, lng: e.center.lng})
                     setBounds({ne: e.marginBounds.ne, sw: e.marginBounds.sw})
                 }}
-                onChildClick={() => {}}
+                onChildClick={(child) => setChildClicked(child)}
             >
                 {places?.map((place,i)=>(
                     <div
                         className={classes.makerContainer}
-                        lat={Number(place.latitude)}
-                        lng={Number(place.longitude)}
+                        lat={Number(place?.latitude)}
+                        lng={Number(place?.longitude)}
                         key={i}
                     >
                         {
-                            isDesktop ? (
+                            !isDesktop ? (
                                 <LocationOnOutlinedIcon color='primary' fontsize='large' />
                             ) : (
                                 <Paper elevation={3} className={classes.paper}>
@@ -47,12 +49,16 @@ const Map = ({setCoordinates, setBounds, coordinates, places}) => {
                                     />
                                     <Rating size='small' value={Number(place.rating)} readOnly />
                                 </Paper>
-             
                             )
                         }
 
                     </div>
                 ))}
+                
+                    <div style={{position: "absolute", transform: 'translate(0%,0%)'}}>
+                        <img height={100} src={`https://openweather.site/img/wn/${weatherData?.weather?.[0]?.icon}.png`} />
+                    </div>
+            
             </GoogleMapReact>
         </div>
     )
